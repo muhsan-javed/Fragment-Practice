@@ -20,24 +20,23 @@ import android.widget.TextView;
  */
 public class HelloFragment extends Fragment {
     public static final String TAG ="FRAGMENT";
-    private String message;
+//    private String message;
 
     public HelloFragment() {
         // Required empty public constructor
     }
 
-    @Override
-    public void onAttach(@NonNull Context context) {
-        super.onAttach(context);
-        Log.d(TAG, "onAttach : Fragment");
+    public static HelloFragment newInstance(Person person) {
+
+        Bundle args = new Bundle();
+        args.putParcelable("key", person);
+
+        HelloFragment fragment = new HelloFragment();
+        fragment.setArguments(args);
+        return fragment;
     }
 
-    @Override
-    public void onCreate(@Nullable Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        Log.d(TAG, "onCreate : Fragment");
 
-    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -57,7 +56,7 @@ public class HelloFragment extends Fragment {
 //        TextView textView = view.findViewById(R.id.showData);
 //        textView.setText(message);
 
-        TextView showText = view.findViewById(R.id.showData);
+      /*  TextView showText = view.findViewById(R.id.showData);
         Bundle bundle = getArguments();
 
         if (bundle != null){
@@ -67,14 +66,41 @@ public class HelloFragment extends Fragment {
             showText.append(person.getlName() + "\n");
             showText.append(String.valueOf(person.getAge()));
 
+        }*/
+
+
+        TextView showText = view.findViewById(R.id.showData);
+
+        Bundle bundle = getArguments();
+
+        if (bundle!=null){
+            Person person = bundle.getParcelable("key");
+            showText.setText(person.getfName() + "\n");
+            showText.append(person.getlName() + "\n");
+            showText.append(String.valueOf(person.getAge()));
         }
 
        return view;
     }
 
-    public void setData(String message){
-        this.message = message;
+//    public void setData(String message){
+//        this.message = message;
+//    }
+
+
+    @Override
+    public void onAttach(@NonNull Context context) {
+        super.onAttach(context);
+        Log.d(TAG, "onAttach : Fragment");
     }
+
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        Log.d(TAG, "onCreate : Fragment");
+
+    }
+
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);

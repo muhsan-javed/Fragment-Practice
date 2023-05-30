@@ -7,11 +7,15 @@ import android.app.Fragment;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
+import android.widget.Toast;
 
 public class MainActivity extends AppCompatActivity {
     public static final String TAG ="FRAGMENT";
+    private boolean mFragment;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -24,19 +28,34 @@ public class MainActivity extends AppCompatActivity {
         EditText lastName = findViewById(R.id.editTextTextPersonLastName);
         EditText editTextAge = findViewById(R.id.editTextTextPersonAge);
 
+        Button MScreenSize = findViewById(R.id.MesureScreenSize);
+        TextView showSizeTextView = findViewById(R.id.textView);
+
+        MScreenSize.setOnClickListener(view -> {
+            ScreenUtility screenUtility = new ScreenUtility(this);
+
+            showSizeTextView.setText(String.format("With: %s , Height: %s",
+                    screenUtility.getDpWidth(),screenUtility.getDpHeight()));
+
+            if (screenUtility.getDpWidth() >= 620){
+                mFragment = true;
+            }
+
+            Toast.makeText(this, "Using Fragment? "+mFragment, Toast.LENGTH_SHORT).show();
+
+        });
 
         sendDataToFragment.setOnClickListener(view -> {
-            HelloFragment fragment = new HelloFragment();
+//            HelloFragment fragment = new HelloFragment();
             String fName = firstName.getText().toString();
             String lName = lastName.getText().toString();
             int age = Integer.parseInt(editTextAge.getText().toString());
 
             Person person = new Person(fName, lName,age);
-
-            Bundle bundle = new Bundle();
-            bundle.putParcelable("key", person);
-
-            fragment.setArguments(bundle);
+            HelloFragment fragment = HelloFragment.newInstance(person);
+//            Bundle bundle = new Bundle();
+//            bundle.putParcelable("key", person);
+//            fragment.setArguments(bundle);
 
             getSupportFragmentManager().beginTransaction().add(R.id.fragment_container, fragment).commit();
 
@@ -96,7 +115,7 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
-    @Override
+   /* @Override
     public void onAttachFragment(Fragment fragment) {
         super.onAttachFragment(fragment);
         Log.d(TAG, "onAttachFragment : Fragment");
@@ -124,5 +143,5 @@ public class MainActivity extends AppCompatActivity {
     protected void onDestroy() {
         super.onDestroy();
         Log.d(TAG, "onDestroy : Fragment");
-    }
+    }*/
 }
